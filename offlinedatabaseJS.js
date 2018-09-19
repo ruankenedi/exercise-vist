@@ -67,22 +67,24 @@ function createTables(){
 //2. Query e visualização de Update
 function onUpdate(){
     var id = document.itemForm.id.value;
-    var nome = document.itemForm.nome.value;
-    var idade = document.itemForm.idade.value;
-    if (nome == "" || idade == "") {
-        updateStatus("'Nome' e 'Idade' são campos obrigatórios!");
+    console.log('ID onUpdate: ', id);
+    var predio = document.itemForm.predio.value;
+    var localizacao = document.itemForm.localizacao.value;
+    console.log('Localização: ', localizacao);
+    if (predio == "" || localizacao == "") {
+        updateStatus("'Prédio' e 'Localização' são campos obrigatórios!");
     }
     else {
-        var query = "update vilourenco set nome=?, idade=? where id=?;";
+        var query = "update predio set nome=?, localizacao=? where idPredio=?;";
         try {
             localDB.transaction(function(transaction){
-                transaction.executeSql(query, [nome, idade, id], function(transaction, results){
+                transaction.executeSql(query, [predio, localizacao, id], function(transaction, results){
                     if (!results.rowsAffected) {
                         updateStatus("Erro: Update não realizado.");
                     }
                     else {
                         updateForm("", "", "");
-                        updateStatus("Update realizado:" + results.rowsAffected);
+                        updateStatus("Update realizado: " + results.rowsAffected);
                         queryAndUpdateOverview();
                     }
                 }, errorHandler);
@@ -94,49 +96,54 @@ function onUpdate(){
     }
 }
 
-function onDelete(){
-    var id = document.itemForm.id.value;
+// function onDelete(){
+//     var id = document.itemForm.id.value;
     
-    var query = "ALTER TABLE vilourenco AUTO_INCREMENT = 1;";
-    // var teste = "ALTER TABLE vilourenco AUTO_INCREMENT = 1;";
-    try {
-        localDB.transaction(function(transaction){
+//     var query = "ALTER TABLE vilourenco AUTO_INCREMENT = 1;";
+//     // var teste = "ALTER TABLE vilourenco AUTO_INCREMENT = 1;";
+//     try {
+//         localDB.transaction(function(transaction){
         
-            transaction.executeSql(query, [id], function(transaction, results){
-                if (!results.rowsAffected) {
-                    updateStatus("Erro: Delete não realizado.");
-                }
-                else {
-                    updateForm("", "", "");
-                    updateStatus("Linhas deletadas:" + results.rowsAffected);
+//             transaction.executeSql(query, [id], function(transaction, results){
+//                 if (!results.rowsAffected) {
+//                     updateStatus("Erro: Delete não realizado.");
+//                 }
+//                 else {
+//                     updateForm("", "", "");
+//                     updateStatus("Linhas deletadas:" + results.rowsAffected);
                     
-                    queryAndUpdateOverview();
-                }
-            }, errorHandler);
-        });
-    } 
-    catch (e) {
-        updateStatus("Erro: DELETE não realizado " + e + ".");
-    }
+//                     queryAndUpdateOverview();
+//                 }
+//             }, errorHandler);
+//         });
+//     } 
+//     catch (e) {
+//         updateStatus("Erro: DELETE não realizado " + e + ".");
+//     }
     
-}
+// }
 
 function onCreate(){
-    // var nome = document.itemForm.nome.value;
     var predios = document.itemForm.predio.value;
-    var apartamento = document.itemForm.apartamento.value;
-    var tipologia = document.itemForm.tipologia.value;
-    var perfil = document.itemForm.perfil.value;
+    console.log('Predios onCreate: ', predios);
+    var localizacao = document.itemForm.localizacao.value;
+    console.log('Localização onCreate: ', localizacao);
+    // var nome = document.itemForm.nome.value;
+    // var apartamento = document.itemForm.apartamento.value;
+    // var tipologia = document.itemForm.tipologia.value;
+    // var perfil = document.itemForm.perfil.value;
     // var idade = document.itemForm.idade.value;
-    if (predios == "" || apartamento == "" || tipologia == "" || perfil == "") {
-        updateStatus("Erro: 'Nome' e 'Idade' são campos obrigatórios!");
+
+    // || apartamento == "" || tipologia == "" || perfil == ""
+    if (predios == "" || localizacao == "") {
+        updateStatus("Erro: 'Prédio' e 'Localização' são campos obrigatórios!");
     }
     else {
-        var query = "insert into predio (nome, localizacao) VALUES (?, ?);";
+        var query = "insert into predio(nome, localizacao) VALUES (?, ?);";
         try {
             localDB.transaction(function(transaction){
                 // , apartamento, tipologia, perfil
-                transaction.executeSql(query, [predios], function(transaction, results){
+                transaction.executeSql(query, [predios, localizacao], function(transaction, results){
                     if (!results.rowsAffected) {
                         updateStatus("Erro: Inserção não realizada");
                     }
@@ -155,7 +162,8 @@ function onCreate(){
 }
 
 function onSelect(htmlLIElement){
-	var id = htmlLIElement.getAttribute("id");
+    var id = htmlLIElement.getAttribute("id");
+    console.log('ID: ', htmlLIElement);
 	
 	query = "SELECT * FROM predio where idPredio=?;";
     try {
@@ -165,7 +173,7 @@ function onSelect(htmlLIElement){
             
                 var row = results.rows.item(0);
                 
-                updateForm(row['id'], row['nome'], row['localizacao']);
+                updateForm(row['idPredio'], row['nome'], row['localizacao']);
                 
             }, function(transaction, error){
                 updateStatus("Erro: " + error.code + "<br>Mensagem: " + error.message);
@@ -178,7 +186,7 @@ function onSelect(htmlLIElement){
    
 }
 
-function queryAndUpdateOverview(){
+function queryAndUpdateOverview() {
 
 	//Remove as linhas existentes para inserção das novas
     var dataRows = document.getElementById("itemData").getElementsByClassName("data");
@@ -195,14 +203,15 @@ function queryAndUpdateOverview(){
         
             transaction.executeSql(query, [], function(transaction, results){
                 for (var i = 0; i < results.rows.length; i++) {
-                
+
                     var row = results.rows.item(i);
                     var li = document.createElement("li");
-					li.setAttribute("id", row['id']);
+                    
+					li.setAttribute("id", row['idPredio']);
                     li.setAttribute("class", "data");
                     li.setAttribute("onclick", "onSelect(this)");
                     
-                    var liText = document.createTextNode(row['nome'] + " x "+ row['localizacao']);
+                    var liText = document.createTextNode(row['nome'] + " x " + row['localizacao']);
                     li.appendChild(liText);
                     
                     document.getElementById("itemData").appendChild(li);
@@ -231,12 +240,13 @@ nullDataHandler = function(transaction, results){
 
 // Funções de update
 
-function updateForm(id, apartamento, predio, tipologia, perfil){
+function updateForm(id, apartamento, predio, localizacao, tipologia, perfil){
     document.itemForm.id.value = id;
-    document.itemForm.nome.value = apartamento;
+    // document.itemForm.nome.value = apartamento;
     document.itemForm.predio.value = predio;
-    document.itemForm.tipologia.value = tipologia;
-    document.itemForm.perfil.value = perfil;
+    document.itemForm.localizacao.value = localizacao;
+    // document.itemForm.tipologia.value = tipologia;
+    // document.itemForm.perfil.value = perfil;
 }
 
 function updateStatus(status){
