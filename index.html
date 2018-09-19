@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html manifest="offlinedatabase.manifest">
+   <head>
+   	  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+   	  <meta name="viewport" content="width=480; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+      <title>Offline HTML5 SQLite - blog.vilourenco.com.br</title>
+      <script type="text/javascript" src="offlinedatabaseJS.js" ></script>
+   <style>
+ 	body { font-family:Verdana, Geneva, sans-serif; font-size:11px; }
+   </style>
+      
+      
+   </head>
+   <body onload="onInit()">
+      <h3>Dados:</h3>
+      <ul id="itemData" style="cursor:pointer;">
+      </ul>
+
+      <form name="itemForm">
+        <label for="id">Id:</label><input type="text" name="id" id="id" size=2 disabled="true"/>
+        <h3>Prédios</h3>
+        <label>Prédio para fazer vistoria</label>
+        <select name="predio" id="predio">
+          <option value="predio_1">Prédio 1</option>
+          <option value="predio_2">Prédio 2</option>
+          <option value="predio_3">Prédio 3</option>
+        </select>
+
+        <h3>Localização do Prédio</h3>
+        <label for="localizacao"><input type="text" name="localizacao" id="localizacao"></label>
+
+        <!-- // Field up: data is attached // -->
+        <h3>Apartamento</h3>
+        <label>Apartamento para fazer vistoria</label>
+        <select name="apartamento" id="apartamento">
+          <option value="apartamento_1">Prédio 1</option>
+          <option value="apartamento_2">Prédio 2</option>
+          <option value="apartamento_3">Prédio 3</option>
+        </select>
+
+        <h3>Tipologia</h3>
+        <label>Tipologia para fazer vistoria</label>
+        <select name="tipologia" id="tipologia">
+          <option value="tipologia_1">Tipologia 1</option>
+          <option value="tipologia_2">Tipologia 2</option>
+          <option value="tipologia_3">Tipologia 3</option>
+        </select>
+
+        <h3>Perfil</h3>
+
+        <label>Perfil para fazer vistoria</label>
+        <select name="perfil" id="perfil">
+          <option value="perfil_1">Perfil 1</option>
+          <option value="perfil_2">Perfil 2</option>
+          <option value="perfil_3">Perfil 3</option>
+        </select>
+
+        <!-- <h3>Questionário</h3>
+        <label>Responda as questões</label>
+        <label>Tem risco: <input type="text"></label>
+        <label>Está quebrado: <input type="text"></label> -->
+
+        <br>
+        <br>
+
+        <input type="button" name="create" value="Create" onclick="onCreate()" />
+        <input type="button" name="update" value="Update" onclick="onUpdate()" />
+        <input type="button" name="delete" value="Delete" onclick="onDelete()" />
+      
+      </form>
+
+	  <!-- <h3>Detalhes:</h3>
+      <form name="itemForm">
+		<label for="id">Id:</label><input type="text" name="id" id="id" size=2 disabled="true"/>
+		<label for="nome">Nome:</label><input type="text" name="nome" id="nome" size=10/>
+		<label for="idade">Idade</label><input type="text" name="idade" id="idade" size=3 /> <br>
+		<br>
+		<input type="button" name="create" value="Create" onclick="onCreate()" />
+		<input type="button" name="update" value="Update" onclick="onUpdate()" />
+		<input type="button" name="delete" value="Delete" onclick="onDelete()" />
+      </form> -->
+	  <h4>Status:</h4>
+      <div id="status"></div>
+   </body>
+</html>
