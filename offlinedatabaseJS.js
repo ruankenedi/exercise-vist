@@ -96,43 +96,41 @@ function onUpdate(){
     }
 }
 
-// function onDelete(){
-//     var id = document.itemForm.id.value;
+function onDelete(){
+    var id = document.itemForm.id.value;
     
-//     var query = "ALTER TABLE vilourenco AUTO_INCREMENT = 1;";
-//     // var teste = "ALTER TABLE vilourenco AUTO_INCREMENT = 1;";
-//     try {
-//         localDB.transaction(function(transaction){
+    var query = "DELETE FROM predio WHERE idPredio=?;";
+
+    try {
+        localDB.transaction(function(transaction){
         
-//             transaction.executeSql(query, [id], function(transaction, results){
-//                 if (!results.rowsAffected) {
-//                     updateStatus("Erro: Delete não realizado.");
-//                 }
-//                 else {
-//                     updateForm("", "", "");
-//                     updateStatus("Linhas deletadas:" + results.rowsAffected);
+            transaction.executeSql(query, [id], function(transaction, results){
+                if (!results.rowsAffected) {
+                    updateStatus("Erro: Delete não realizado.");
+                }
+                else {
+                    updateForm("", "", "");
+                    updateStatus("Linhas deletadas:" + results.rowsAffected);
                     
-//                     queryAndUpdateOverview();
-//                 }
-//             }, errorHandler);
-//         });
-//     } 
-//     catch (e) {
-//         updateStatus("Erro: DELETE não realizado " + e + ".");
-//     }
+                    queryAndUpdateOverview();
+                }
+            }, errorHandler);
+        });
+    } 
+    catch (e) {
+        updateStatus("Erro: DELETE não realizado " + e + ".");
+    }
     
-// }
+}
 
 function onCreate(){
     var predios = document.itemForm.predio.value;
     console.log('Predios onCreate: ', predios);
     var localizacao = document.itemForm.localizacao.value;
     console.log('Localização onCreate: ', localizacao);
-    // var nome = document.itemForm.nome.value;
     // var apartamento = document.itemForm.apartamento.value;
     // var tipologia = document.itemForm.tipologia.value;
     // var perfil = document.itemForm.perfil.value;
-    // var idade = document.itemForm.idade.value;
 
     // || apartamento == "" || tipologia == "" || perfil == ""
     if (predios == "" || localizacao == "") {
